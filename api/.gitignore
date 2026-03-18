@@ -1,0 +1,43 @@
+# Virtual environment
+venv/
+env/
+.venv/
+.env
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE-specific files (e.g., VS Code, PyCharm)
+.vscode/
+.idea/
+
+# SQLite database file (if used locally)
+db.sqlite3
+*.sqlite3
+
+# Media and Static files (generated during runtime or deployment)
+media/
+static/
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# OS-specific files
+.DS_Store
+*.swp
