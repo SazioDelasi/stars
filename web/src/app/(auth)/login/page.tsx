@@ -4,6 +4,7 @@ import { Checkbox, TextInput } from "@/components/ui/inputs";
 import api from "@/lib/axios";
 import { LoginSchema, type LoginInput } from "@/schemas/auth.schema";
 import { useAuthStore } from "@/store/auth.store";
+import { useProfileStore } from "@/store/profile.store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import Link from "next/link";
@@ -26,12 +27,20 @@ export default function LoginPage() {
     },
   });
 
+  const setProfile = useProfileStore((state) => state.setProfile);
+
   const onSubmit = async (data: LoginInput & { rememberMe?: boolean }) => {
     setIsLoading(true);
     try {
       const response = await api.post("/auth/login/", { email: data.email, password: data.password });
-      const { user, accessToken, refreshToken } = response.data;
-      setAuth(user, accessToken, refreshToken, !!data.rememberMe);
+      const { user, tokens } = response.data;
+
+      setAuth(user, tokens.access, tokens.refresh, !!data.rememberMe);
+      const profileResponse = await api.get("/accounts/me/", {
+        headers: { Authorization: `Bearer ${tokens.access}` }
+      });
+      setProfile(profileResponse.data.profile);
+
       toast.success(`Welcome back, ${user.username}`);
       router.push(`/${user.role.toLowerCase()}`);
     } catch (error: any) {

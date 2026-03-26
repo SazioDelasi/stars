@@ -2,6 +2,7 @@
 
 import { withRole } from "@/components/auth/with-role";
 import { useAuthStore } from "@/store/auth.store";
+import { useProfileStore } from "@/store/profile.store";
 import {
   Clock,
   BookCheck,
@@ -15,8 +16,25 @@ import {
 import Link from "next/link";
 
 export default function DashboardPage() {
+  const { user } = useAuthStore();
+  const { profile } = useProfileStore();
 
-  const { user, logout } = useAuthStore();
+  const userInformation = {
+    first_name: user?.first_name,
+    last_name: user?.last_name,
+    full_name: `${user?.first_name} ${user?.last_name}`,
+    student_id: profile?.index_number,
+    programme: "BSc. Computer Science",
+    school: "School of Sciences",
+    year_of_entry: profile?.enrollment_year,
+    session: profile?.session,
+    fee_payment: profile?.fee_payment,
+    registration_status: "Fully Registered",
+    current_cwa: 74,
+    semester_credits: 18,
+    level: profile?.level,
+    semester: 1
+  }
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
 
@@ -45,12 +63,12 @@ export default function DashboardPage() {
           {/* Primary Identity */}
           <div className="space-y-4 min-w-75">
             <div>
-              <h1 className="text-3xl font-bold text-slate-900 font-lato">{user?.first_name} {user?.last_name}</h1>
-              <p className="text-uenr-brown font-bold font-roboto text-sm tracking-tight">UENR/ST/22/0045</p>
+              <h1 className="text-3xl font-bold text-slate-900 font-lato">{userInformation.full_name}</h1>
+              <p className="text-uenr-brown font-bold font-roboto text-sm tracking-tight">{userInformation.student_id}</p>
             </div>
             <div className="flex items-center gap-2 bg-uenr-green/10 text-uenr-green px-3 py-1.5 rounded-lg w-fit">
               <div className="w-2 h-2 rounded-full bg-uenr-green animate-pulse" />
-              <span className="text-[10px] font-bold uppercase tracking-wider font-roboto">Fully Registered</span>
+              <span className="text-[10px] font-bold uppercase tracking-wider font-roboto">{userInformation.registration_status}</span>
             </div>
           </div>
 
@@ -59,22 +77,22 @@ export default function DashboardPage() {
             <AcademicInfo
               icon={<GraduationCap size={16} />}
               label="Programme"
-              value="BSc. Computer Engineering"
+              value={userInformation.programme}
             />
             <AcademicInfo
               icon={<School size={16} />}
               label="School"
-              value="School of Engineering"
+              value={userInformation.school}
             />
             <AcademicInfo
               icon={<CalendarCheck size={16} />}
               label="Year of Entry"
-              value="2022"
+              value={userInformation.year_of_entry ?? "N/A"}
             />
             <AcademicInfo
               icon={<BookCheck size={16} />}
               label="Enrollment"
-              value="Regular / Full-Time"
+              value={`${userInformation.session} / ${userInformation.fee_payment ?? "N/A"}`}
             />
           </div>
         </div>
@@ -83,7 +101,7 @@ export default function DashboardPage() {
       {/* 3. PERFORMANCE & PROGRESS QUICK-LOOK */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white border border-slate-200 rounded-4xl p-6 flex items-center gap-4">
-          <div className="h-12 w-12 bg-slate-50 rounded-2xl flex items-center justify-center text-uenr-brown font-black font-lato text-xl">74</div>
+          <div className="h-12 w-12 bg-slate-50 rounded-2xl flex items-center justify-center text-uenr-brown font-black font-lato text-xl">{userInformation.current_cwa}</div>
           <div>
             <p className="text-[10px] font-bold text-slate-400 uppercase font-roboto">Current CWA</p>
             <p className="text-sm font-bold text-slate-800 font-lato">First Class Division</p>
@@ -91,7 +109,7 @@ export default function DashboardPage() {
         </div>
 
         <div className="bg-white border border-slate-200 rounded-4xl p-6 flex items-center gap-4">
-          <div className="h-12 w-12 bg-slate-50 rounded-2xl flex items-center justify-center text-uenr-blue font-black font-lato text-xl">18</div>
+          <div className="h-12 w-12 bg-slate-50 rounded-2xl flex items-center justify-center text-uenr-blue font-black font-lato text-xl">{userInformation.semester_credits}</div>
           <div>
             <p className="text-[10px] font-bold text-slate-400 uppercase font-roboto">Semester Credits</p>
             <p className="text-sm font-bold text-slate-800 font-lato">6 Registered Courses</p>
@@ -102,7 +120,7 @@ export default function DashboardPage() {
           <div className="h-12 w-12 bg-slate-50 rounded-2xl flex items-center justify-center text-uenr-green font-black font-lato text-xl">03</div>
           <div>
             <p className="text-[10px] font-bold text-slate-400 uppercase font-roboto">Academic Year</p>
-            <p className="text-sm font-bold text-slate-800 font-lato">Level 300 - Sem 1</p>
+            <p className="text-sm font-bold text-slate-800 font-lato">Level {userInformation.level} - Sem {userInformation.semester}</p>
           </div>
         </div>
       </div>

@@ -3,15 +3,16 @@ from accounts.serializer.student import StudentSerializer
 from accounts.models import Student
 from authentication.models import User
 
-class UserMeSerializer(serializers.ModelSerializer):
+
+class ProfileSerializer(serializers.ModelSerializer):
     profile = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'first_name', 'last_name', 'role', 'profile']
+        fields = ["id", "email", "first_name", "last_name", "role", "profile"]
 
     def get_profile(self, obj):
-        if obj.role == 'student':
+        if obj.role == User.Role.STUDENT:
             try:
                 return StudentSerializer(obj.student).data
             except Student.DoesNotExist:
