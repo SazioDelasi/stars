@@ -3,6 +3,7 @@
 import { useAuthStore } from "@/store/auth.store";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Unauthorized } from "./unauthorized";
 
 interface RoleGuardProps {
 	children: React.ReactNode;
@@ -22,14 +23,16 @@ export function RoleGuard({ children, allowedRoles }: RoleGuardProps) {
 		if (isHydrated) {
 			if (!user) {
 				router.replace("/login");
-			} else if (!allowedRoles.includes(user.role.toLowerCase() as any)) {
-				router.replace(`/${user.role.toLowerCase()}`);
 			}
 		}
 	}, [user, isHydrated, router, allowedRoles]);
 
-	if (!isHydrated || !user || !allowedRoles.includes(user.role.toLowerCase() as any)) {
-		return null;
+	if (!isHydrated) return null;
+
+	if (!user) return null;
+
+	if (!allowedRoles.includes(user.role.toLowerCase() as any)) {
+		return <Unauthorized />;
 	}
 
 	return <>{children}</>;
