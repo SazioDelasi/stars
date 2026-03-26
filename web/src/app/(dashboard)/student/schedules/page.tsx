@@ -131,7 +131,7 @@ export default function SchedulesPage() {
 function AgendaItem({ item, status }: any) {
   return (
     <div className={`
-      p-5 rounded-[2rem] border transition-all relative overflow-hidden group
+      p-5 rounded-4xl border transition-all relative overflow-hidden group
       ${status === 'active' ? 'bg-uenr-brown text-white shadow-xl shadow-maroon-900/20 scale-[1.02]' : 'bg-white border-slate-100'}
     `}>
       {status === 'active' && (

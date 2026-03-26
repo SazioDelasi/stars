@@ -73,7 +73,7 @@ export default function StudyGuide() {
 
           <div className="flex-1 overflow-y-auto custom-scrollbar space-y-4 pr-2">
             {goals.filter(g => activeTab === 'history' ? g.status === 'Completed' : g.status !== 'Completed').map((goal) => (
-              <div key={goal.id} className="bg-white border border-slate-100 p-6 rounded-[2rem] shadow-sm hover:border-uenr-brown/20 transition-all group">
+              <div key={goal.id} className="bg-white border border-slate-100 p-6 rounded-4xl shadow-sm hover:border-uenr-brown/20 transition-all group">
                 <div className="flex justify-between items-start">
                   <div className="flex gap-4">
                     <div className={`mt-1 h-5 w-5 rounded-full border-2 flex items-center justify-center transition-colors ${goal.status === 'Completed' ? 'bg-uenr-green border-uenr-green text-white' : 'border-slate-200'}`}>
@@ -112,7 +112,7 @@ export default function StudyGuide() {
 
             <div className="p-6 space-y-4 overflow-y-auto custom-scrollbar">
               {suggestions.map((s) => (
-                <div key={s.id} className="bg-white p-5 rounded-[1.5rem] border border-slate-100 shadow-sm space-y-3">
+                <div key={s.id} className="bg-white p-5 rounded-3xl border border-slate-100 shadow-sm space-y-3">
                   <div className="flex items-start gap-3">
                     <div className="p-2 bg-uenr-gold/10 text-uenr-gold rounded-xl">
                       <Lightbulb size={18} />

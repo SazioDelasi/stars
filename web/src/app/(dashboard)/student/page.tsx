@@ -1,7 +1,11 @@
-import { 
-  Clock, 
-  BookCheck, 
-  AlertCircle, 
+"use client";
+
+import { withRole } from "@/components/auth/with-role";
+import { useAuthStore } from "@/store/auth.store";
+import {
+  Clock,
+  BookCheck,
+  AlertCircle,
   ChevronRight,
   BookOpen,
   GraduationCap,
@@ -11,9 +15,11 @@ import {
 import Link from "next/link";
 
 export default function DashboardPage() {
+
+  const { user, logout } = useAuthStore();
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      
+
       {/* 1. URGENT NOTIFICATIONS */}
       <section className="bg-uenr-brown text-white rounded-4xl p-6 shadow-lg shadow-maroon-900/20 flex flex-col md:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-4">
@@ -32,14 +38,14 @@ export default function DashboardPage() {
         </button>
       </section>
 
-      {/* 2. DETAILED ACADEMIC PROFILE HEADER */}
+      {/* DETAILED ACADEMIC PROFILE HEADER */}
       <div className="bg-white border border-slate-200 rounded-[2.5rem] p-8 shadow-sm">
         <div className="flex flex-col lg:flex-row justify-between gap-8">
-          
+
           {/* Primary Identity */}
-          <div className="space-y-4 min-w-[300px]">
+          <div className="space-y-4 min-w-75">
             <div>
-              <h1 className="text-3xl font-bold text-slate-900 font-lato">Kwame Osei</h1>
+              <h1 className="text-3xl font-bold text-slate-900 font-lato">{user?.first_name} {user?.last_name}</h1>
               <p className="text-uenr-brown font-bold font-roboto text-sm tracking-tight">UENR/ST/22/0045</p>
             </div>
             <div className="flex items-center gap-2 bg-uenr-green/10 text-uenr-green px-3 py-1.5 rounded-lg w-fit">
@@ -50,25 +56,25 @@ export default function DashboardPage() {
 
           {/* Academic Metadata Grid */}
           <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-6 py-2">
-            <AcademicInfo 
-              icon={<GraduationCap size={16} />} 
-              label="Programme" 
-              value="BSc. Computer Engineering" 
+            <AcademicInfo
+              icon={<GraduationCap size={16} />}
+              label="Programme"
+              value="BSc. Computer Engineering"
             />
-            <AcademicInfo 
-              icon={<School size={16} />} 
-              label="School" 
-              value="School of Engineering" 
+            <AcademicInfo
+              icon={<School size={16} />}
+              label="School"
+              value="School of Engineering"
             />
-            <AcademicInfo 
-              icon={<CalendarCheck size={16} />} 
-              label="Year of Entry" 
-              value="2022" 
+            <AcademicInfo
+              icon={<CalendarCheck size={16} />}
+              label="Year of Entry"
+              value="2022"
             />
-            <AcademicInfo 
-              icon={<BookCheck size={16} />} 
-              label="Enrollment" 
-              value="Regular / Full-Time" 
+            <AcademicInfo
+              icon={<BookCheck size={16} />}
+              label="Enrollment"
+              value="Regular / Full-Time"
             />
           </div>
         </div>
@@ -76,15 +82,15 @@ export default function DashboardPage() {
 
       {/* 3. PERFORMANCE & PROGRESS QUICK-LOOK */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white border border-slate-200 rounded-[2rem] p-6 flex items-center gap-4">
+        <div className="bg-white border border-slate-200 rounded-4xl p-6 flex items-center gap-4">
           <div className="h-12 w-12 bg-slate-50 rounded-2xl flex items-center justify-center text-uenr-brown font-black font-lato text-xl">74</div>
           <div>
             <p className="text-[10px] font-bold text-slate-400 uppercase font-roboto">Current CWA</p>
             <p className="text-sm font-bold text-slate-800 font-lato">First Class Division</p>
           </div>
         </div>
-        
-        <div className="bg-white border border-slate-200 rounded-[2rem] p-6 flex items-center gap-4">
+
+        <div className="bg-white border border-slate-200 rounded-4xl p-6 flex items-center gap-4">
           <div className="h-12 w-12 bg-slate-50 rounded-2xl flex items-center justify-center text-uenr-blue font-black font-lato text-xl">18</div>
           <div>
             <p className="text-[10px] font-bold text-slate-400 uppercase font-roboto">Semester Credits</p>
@@ -92,7 +98,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <div className="bg-white border border-slate-200 rounded-[2rem] p-6 flex items-center gap-4">
+        <div className="bg-white border border-slate-200 rounded-4xl p-6 flex items-center gap-4">
           <div className="h-12 w-12 bg-slate-50 rounded-2xl flex items-center justify-center text-uenr-green font-black font-lato text-xl">03</div>
           <div>
             <p className="text-[10px] font-bold text-slate-400 uppercase font-roboto">Academic Year</p>
@@ -111,8 +117,8 @@ export default function DashboardPage() {
             <Link href="/schedules" className="text-xs font-bold text-uenr-brown hover:underline">VIEW FULL TIMETABLE</Link>
           </div>
           <div className="grid gap-3">
-             <ScheduleCard time="10:30 AM" code="CSC 305" title="Software Engineering" venue="LT 12" type="Lecture" active />
-             <ScheduleCard time="02:00 PM" code="ELC 301" title="Power Systems" venue="Virtual" type="Discussion" />
+            <ScheduleCard time="10:30 AM" code="CSC 305" title="Software Engineering" venue="LT 12" type="Lecture" active />
+            <ScheduleCard time="02:00 PM" code="ELC 301" title="Power Systems" venue="Virtual" type="Discussion" />
           </div>
         </section>
 
@@ -160,7 +166,7 @@ function CourseDetailItem({ title, code, lecturer }: any) {
 function ScheduleCard({ time, code, title, venue, type, active = false }: any) {
   return (
     <div className={`
-      relative p-5 rounded-[1.5rem] border transition-all flex items-center justify-between group
+      relative p-5 rounded-3xl border transition-all flex items-center justify-between group
       ${active ? 'bg-white border-uenr-brown shadow-md' : 'bg-white border-slate-100 hover:border-slate-300'}
     `}>
       <div className="flex items-center gap-4">

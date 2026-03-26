@@ -1,16 +1,45 @@
 "use client";
 
 import { Checkbox, TextInput } from "@/components/ui/inputs";
-import { loginSchema, type LoginInput } from "@/lib/validations/auth";
+import api from "@/lib/axios";
+import { LoginSchema, type LoginInput } from "@/schemas/auth.schema";
+import { useAuthStore } from "@/store/auth.store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export default function LoginPage() {
-  const { register, handleSubmit, formState: { errors } } = useForm<LoginInput>({
-    resolver: zodResolver(loginSchema),
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const setAuth = useAuthStore((state) => state.setAuth);
+
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginInput & { rememberMe?: boolean }>({
+    resolver: zodResolver(LoginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      rememberMe: false,
+    },
   });
+
+  const onSubmit = async (data: LoginInput & { rememberMe?: boolean }) => {
+    setIsLoading(true);
+    try {
+      const response = await api.post("/auth/login/", { email: data.email, password: data.password });
+      const { user, accessToken, refreshToken } = response.data;
+      setAuth(user, accessToken, refreshToken, !!data.rememberMe);
+      toast.success(`Welcome back, ${user.username}`);
+      router.push(`/${user.role.toLowerCase()}`);
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Login failed. Please check your credentials.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="w-full max-w-sm mx-auto">
@@ -22,14 +51,14 @@ export default function LoginPage() {
         <h1 className="text-2xl font-bold text-uenr-brown font-lato">Login</h1>
       </div>
 
-      <form onSubmit={handleSubmit((data) => console.log(data))} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Username Input */}
         <TextInput
           label="Email"
           type="email"
           placeholder="xxxx@uenr.edu.gh"
-          error={errors.indexNumber?.message}
-          {...register("indexNumber")}
+          error={errors.email?.message}
+          {...register("email")}
         />
 
         {/* Password Input with Forgot Link Integration */}
@@ -57,8 +86,11 @@ export default function LoginPage() {
         </div>
 
         {/* Log In Button */}
-        <button className="w-full bg-uenr-brown text-white py-4 rounded-xl font-bold shadow-lg shadow-maroon-900/20 hover:bg-uenr-brown-hover transition-all active:scale-[0.98] mt-4 font-roboto tracking-wide uppercase text-sm">
-          Log In
+        <button
+          disabled={isLoading}
+          className="w-full bg-uenr-brown disabled:bg-slate-300 text-white py-4 rounded-xl font-bold shadow-lg shadow-maroon-900/20 hover:bg-uenr-brown-hover transition-all active:scale-[0.98] mt-4 font-roboto tracking-wide uppercase text-sm"
+        >
+          {isLoading ? "Authenticating..." : "Log In"}
         </button>
       </form>
 
