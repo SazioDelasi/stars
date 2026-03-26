@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@theme {
+	/* UENR Brand Colors And Variants */
+	--color-uenr-green: #00873c;
+	--color-uenr-green-hover: color-mix(
+		in srgb,
+		var(--color-uenr-green) 95%,
+		white
+	);
+	--color-uenr-blue: #00adef;
+	--color-uenr-blue-hover: color-mix(
+		in srgb,
+		var(--color-uenr-blue) 95%,
+		white
+	);
+	--color-uenr-brown: #731d1d;
+	--color-uenr-brown-hover: color-mix(
+		in srgb,
+		var(--color-uenr-brown) 95%,
+		white
+	);
+	--color-uenr-gold: #f9ed32;
+	--color-uenr-gold-hover: color-mix(
+		in srgb,
+		var(--color-uenr-gold) 95%,
+		white
+	);
+
+	/* Semantic Mapping */
+	--color-background: #f8fafc;
+	--color-foreground: #0f172a;
+
+	--color-primary: var(--color-uenr-brown);
+	--color-primary-foreground: #ffffff;
+
+	--color-secondary: var(--color-uenr-green);
+	--color-secondary-foreground: #ffffff;
+
+	--color-accent: var(--color-uenr-gold);
+	--color-muted: #64748b;
+	--color-destructive: #ef4444;
+
+	/* Login and Auth Specifics */
+	--color-login-bg: color-mix(in srgb, var(--color-uenr-blue) 10%, white);
+
+	/* Dashboard Specifics */
+	--radius-portal: 0.75rem;
+	--shadow-card: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+
+	/* Typography Mapping - The Swapped Version */
+	--font-lato: "Lato", sans-serif;
+	--font-roboto: "Roboto", sans-serif;
+
+	/* Weights */
+	--font-weight-heading: 700; /* Lato Bold */
+	--font-weight-body: 400; /* Roboto Regular */
+	--font-weight-label: 700; /* Roboto Bold for labels */
+}
+
+@layer base {
+	h1,
+	h2,
+	h3,
+	h4 {
+		font-family: var(--font-lato);
+		@apply tracking-tight;
+	}
+
+	body,
+	p,
+	input,
+	button {
+		font-family: var(--font-roboto);
+		@apply leading-normal;
+	}
+
+	/* Labels in Roboto for that clean, functional look */
+	label {
+		font-family: var(--font-roboto);
+		@apply tracking-wider uppercase;
+	}
+}
+
+@layer utilities {
+	.custom-scrollbar::-webkit-scrollbar {
+		width: 5px;
+	}
+	.custom-scrollbar::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	.custom-scrollbar::-webkit-scrollbar-thumb {
+		@apply bg-slate-200 rounded-full hover:bg-slate-300 transition-colors;
+	}
+}
