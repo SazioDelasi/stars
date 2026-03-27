@@ -1,11 +1,12 @@
 from django.db import models
 from authentication.models import User
+from academics.models import Programme
 
 
 # Create your models here.
 class Student(models.Model):
     class Session(models.TextChoices):
-        FULL_TIME = "FULL_TIME", "Full time"
+        FULL_TIME = "FULL_TIME", "Full Time"
         WEEKEND = "WEEKEND", "Weekend"
 
     class FeePayment(models.TextChoices):
@@ -19,7 +20,7 @@ class Student(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     index_number = models.CharField(unique=True, max_length=10)
-    # programme = models.ForeignKey('To do', on_delete=models.SET_NULL)
+    programme = models.ForeignKey(Programme, on_delete=models.SET_NULL, null=True)
     level = models.PositiveIntegerField(default=100)
     enrollment_year = models.PositiveIntegerField()
     session = models.CharField(max_length=10, choices=Session.choices)

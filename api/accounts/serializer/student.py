@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from accounts.models import Student
+from accounts.models.student import Student
 
 class StudentSerializer(serializers.ModelSerializer):
     session = serializers.ReadOnlyField(source='get_session_display')

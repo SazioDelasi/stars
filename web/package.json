@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "greet": "echo 'hello'"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
