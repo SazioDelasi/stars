@@ -7,9 +7,9 @@ name = "pypi"
 django = "*"
 djangorestframework = "*"
 markdown = "*"
-django-filter = "*"
 djangorestframework-simplejwt = {extras = ["crypto"], version = "*"}
 django-cors-headers = "*"
+django-filter = "*"
 
 [dev-packages]
 

@@ -8,6 +8,7 @@ from accounts.serializer.profile import ProfileSerializer
 
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = ProfileSerializer
 
     def get(self, request):
         serializer = ProfileSerializer(request.user)

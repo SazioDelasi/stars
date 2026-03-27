@@ -11,9 +11,10 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["id", "email", "first_name", "last_name", "role", "gender", "profile"]
+        fields = ["id", "email", "first_name", "last_name", "role", "gender", "phone", "profile"]
 
     def get_profile(self, obj):
+        
         if obj.role == User.Role.STUDENT:
             try:
                 return StudentSerializer(obj.student).data
