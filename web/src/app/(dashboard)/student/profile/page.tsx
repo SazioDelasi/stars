@@ -1,23 +1,38 @@
 "use client";
 
-import { useState } from "react";
+import { useAuthStore } from "@/store/auth.store";
+import { useProfileStore } from "@/store/profile.store";
 import {
-  User, Mail, Phone, MapPin, ShieldCheck,
-  Camera, Edit2, Globe, Hash, Calendar,
-  Fingerprint, Award, CheckCircle
+  Award,
+  Calendar,
+  Camera,
+  CheckCircle,
+  Edit2,
+  Fingerprint,
+  Globe, Hash,
+  Mail,
+  MapPin,
+  Phone,
+  ShieldCheck,
+  User
 } from "lucide-react";
+import { useState } from "react";
 
 export default function StudentProfile() {
+  const { user } = useAuthStore();
+  const { profile } = useProfileStore();
   const [isEditing, setIsEditing] = useState(false);
 
   const STUDENT_DATA = {
-    name: "ADAMS MAXWELL OWUSU",
-    indexNumber: "20004055",
-    programme: "BSc. Computer Science",
-    level: "300",
-    email: "m.owusu@uenr.edu.gh",
-    phone: "+233 54 000 0000",
-    hometown: "Sunyani, Bono Region",
+    first_name: user?.first_name,
+    last_name: user?.last_name,
+    name: `${user?.first_name} ${user?.last_name}`,
+    indexNumber: profile?.index_number,
+    programme: profile?.programme?.name,
+    level: String(profile?.level),
+    email: user?.email,
+    phone: user?.phone,
+    hometown: profile?.hometown || "Sunyani, Bono Region",
     hall: "GetFund Hostel",
     status: "Regular / Active",
     admissionDate: "Sept 2023"

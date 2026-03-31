@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Plus, Trash2, Info, Save, X, Search, Lock, CheckCircle, AlertTriangle } from "lucide-react";
+import { Plus, Trash2, Info, Save, X, Search, Lock, CheckCircle, AlertTriangle, ArrowRight, CheckCircle2, BookOpen } from "lucide-react";
+import { getStatusConfig } from "@/config/misc";
 
 export default function CourseRegistration() {
 	const [isRegistered, setIsRegistered] = useState(false);
@@ -38,38 +39,70 @@ export default function CourseRegistration() {
 	const handleFinalize = () => {
 		if (draftList.length > 0) {
 			setIsRegistered(true);
-			// In a real app, this is where you'd POST to your /api/register endpoint
 		}
 	};
 
 	const totalCredits = draftList.reduce((acc, curr) => acc + curr.credits, 0);
+	const config = getStatusConfig("NOT_STARTED");
+  	const StatusIcon = config.icon;
 
 	return (
 		<div className="h-full flex flex-col space-y-6 relative font-roboto">
 
 			{/* 1. HEADER WITH DYNAMIC BUTTON */}
-			<header className="bg-white border border-slate-200 rounded-[2rem] p-6 shadow-sm flex flex-col md:flex-row justify-between items-center gap-6 shrink-0">
-				<div>
-					<h1 className="text-2xl font-bold text-slate-900 font-lato uppercase">Registration</h1>
-					<p className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">
-						{isRegistered ? "✅ Registration Confirmed" : "📝 Selection in Progress"}
-					</p>
+			<header className="bg-white border border-slate-200 rounded-[2.5rem] p-4 md:p-6 shadow-sm flex flex-col md:flex-row justify-between items-center gap-6 shrink-0 transition-all">
+
+				{/* LEFT: Title & Status Badge */}
+				<div className="flex items-center gap-5">
+					<div className="h-14 w-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-uenr-brown shadow-inner">
+						<BookOpen size={28} strokeWidth={2.5} />
+					</div>
+					<div>
+						<div className="flex items-center gap-3">
+							<h1 className="text-2xl font-black text-slate-900 font-lato tracking-tight leading-none">
+								Registration
+							</h1>
+							<div className={`flex items-center gap-2 ${config.bg} ${config.text} px-3 py-1 rounded-full border border-current/10`}>
+								<div className={`w-1.5 h-1.5 rounded-full ${config.dot}`} />
+								<span className="text-[9px] font-black uppercase tracking-widest font-roboto">
+									{config.label}
+								</span>
+							</div>
+						</div>
+						<p className="text-[11px] text-slate-400 font-bold uppercase tracking-tighter mt-1.5 flex items-center gap-1">
+							<span className="text-uenr-brown">1st Semester</span> • 2025/2026 Academic Year
+						</p>
+					</div>
 				</div>
 
-				<div className="flex items-center gap-4 bg-slate-50 px-6 py-3 rounded-2xl border border-slate-100">
-					<div className="text-center">
-						<p className="text-[10px] font-bold text-slate-400 uppercase">Total Credits</p>
-						<p className="text-xl font-black font-lato text-uenr-brown">{totalCredits}.0</p>
+				{/* RIGHT: Stats & Action */}
+				<div className="flex items-center gap-3 w-full md:w-auto">
+
+					{/* Credits Pill */}
+					<div className="flex items-center gap-4 bg-slate-50 px-5 py-2.5 rounded-2xl border border-slate-100 flex-1 md:flex-none justify-center">
+						<div className="text-right">
+							<p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Load</p>
+							<p className="text-lg font-black font-lato text-uenr-brown leading-none">{totalCredits}.0</p>
+						</div>
+						<div className="h-8 w-px bg-slate-200" />
+						<div className="text-left">
+							<p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Status</p>
+							<p className="text-[11px] font-black text-slate-700 uppercase">{totalCredits >= 15 ? 'Valid' : 'Low'}</p>
+						</div>
 					</div>
+
+					{/* Action Button */}
 					{!isRegistered ? (
 						<button
 							onClick={handleFinalize}
-							className="bg-uenr-brown text-white px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-uenr-brown-hover shadow-lg shadow-maroon-900/20 transition-all"
+							className="group bg-uenr-brown text-white h-14 px-8 rounded-2xl font-black text-xs uppercase tracking-[0.15em] hover:bg-uenr-brown-hover shadow-xl shadow-maroon-900/20 transition-all flex items-center gap-3 active:scale-95"
 						>
-							Finalize & Submit
+							Finalize Selection
+							<ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
 						</button>
 					) : (
-						<div className="bg-uenr-green/10 text-uenr-green px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest border border-uenr-green/20">
+						<div className="bg-emerald-500 text-white h-14 px-8 rounded-2xl font-black text-xs uppercase tracking-[0.15em] flex items-center gap-3 shadow-lg shadow-emerald-900/20">
+							<CheckCircle2 size={18} />
 							Submitted
 						</div>
 					)}
@@ -193,7 +226,7 @@ function CourseDetailDrawer({ course, onClose, onAdd, isAlreadyInDraft }: any) {
 	const canRegister = course.prereqMet || course.prereqCode === "None";
 
 	return (
-		<div className="fixed inset-0 z-[100] flex justify-end">
+		<div className="fixed inset-0 z-100 flex justify-end">
 			<div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={onClose} />
 
 			<div className="relative w-full max-w-md bg-white h-full shadow-2xl p-8 animate-in slide-in-from-right-full duration-300 flex flex-col">
@@ -213,7 +246,7 @@ function CourseDetailDrawer({ course, onClose, onAdd, isAlreadyInDraft }: any) {
 					</div>
 
 					{/* Lecturer Card */}
-					<div className="bg-slate-50 border border-slate-100 p-4 rounded-[1.5rem] flex items-center gap-4">
+					<div className="bg-slate-50 border border-slate-100 p-4 rounded-3xl flex items-center gap-4">
 						<div className="h-12 w-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-uenr-brown font-black font-lato text-xl shadow-sm">
 							{course.lecturer?.split(' ').pop()?.[0]}
 						</div>

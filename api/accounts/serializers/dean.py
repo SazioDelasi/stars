@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from academics.models import Dean
-from authentication.serializer.user import UserSummarySerializer
+from authentication.serializers.user import UserSummarySerializer
 
 class DeanSerializer(serializers.ModelSerializer):
     first_name = serializers.ReadOnlyField(source='user.first_name')

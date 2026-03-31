@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
-from authentication.serializer.user import UserSerializer 
+from authentication.serializers.user import UserSerializer 
 from authentication.models import User
 from django.contrib.auth import authenticate
 from authentication.utils.user import get_auth_for_user

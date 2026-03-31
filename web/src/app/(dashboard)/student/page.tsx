@@ -1,6 +1,6 @@
 "use client";
 
-import { withRole } from "@/components/auth/with-role";
+import { getStatusConfig } from "@/config/misc";
 import { useAuthStore } from "@/store/auth.store";
 import { useProfileStore } from "@/store/profile.store";
 import {
@@ -24,17 +24,20 @@ export default function DashboardPage() {
     last_name: user?.last_name,
     full_name: `${user?.first_name} ${user?.last_name}`,
     student_id: profile?.index_number,
-    programme: "BSc. Computer Science",
-    school: "School of Sciences",
+    programme: profile?.programme?.name,
+    school: profile?.school,
     year_of_entry: profile?.enrollment_year,
     session: profile?.session,
     fee_payment: profile?.fee_payment,
-    registration_status: "Fully Registered",
+    registration_status: profile?.registration_status,
     current_cwa: 74,
     semester_credits: 18,
     level: profile?.level,
     semester: 1
   }
+
+  const config = getStatusConfig(userInformation.registration_status ?? "NOT_STARTED");
+
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
 
@@ -66,9 +69,11 @@ export default function DashboardPage() {
               <h1 className="text-3xl font-bold text-slate-900 font-lato">{userInformation.full_name}</h1>
               <p className="text-uenr-brown font-bold font-roboto text-sm tracking-tight">{userInformation.student_id}</p>
             </div>
-            <div className="flex items-center gap-2 bg-uenr-green/10 text-uenr-green px-3 py-1.5 rounded-lg w-fit">
-              <div className="w-2 h-2 rounded-full bg-uenr-green animate-pulse" />
-              <span className="text-[10px] font-bold uppercase tracking-wider font-roboto">{userInformation.registration_status}</span>
+            <div className={`flex items-center gap-2 ${config.bg} ${config.text} px-3 py-1.5 rounded-lg w-fit border border-current/10 shadow-sm transition-all duration-300`}>
+              <div className={`w-2 h-2 rounded-full ${config.dot}`} />
+              <span className="text-[10px] font-black uppercase tracking-widest font-roboto">
+                {config.label}
+              </span>
             </div>
           </div>
 
@@ -77,17 +82,17 @@ export default function DashboardPage() {
             <AcademicInfo
               icon={<GraduationCap size={16} />}
               label="Programme"
-              value={userInformation.programme}
+              value={userInformation.programme ?? "N/A"}
             />
             <AcademicInfo
               icon={<School size={16} />}
               label="School"
-              value={userInformation.school}
+              value={userInformation.school ?? "N/A"}
             />
             <AcademicInfo
               icon={<CalendarCheck size={16} />}
               label="Year of Entry"
-              value={userInformation.year_of_entry ?? "N/A"}
+              value={String(userInformation.year_of_entry ?? "N/A")}
             />
             <AcademicInfo
               icon={<BookCheck size={16} />}

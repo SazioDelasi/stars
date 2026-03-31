@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from accounts.serializer.student import StudentSerializer
+from accounts.serializers.student import StudentSerializer
 from accounts.models.student import Student
 from authentication.models import User
 

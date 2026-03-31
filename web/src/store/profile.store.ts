@@ -2,13 +2,41 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface UserProfile {
-	id: string;
+	id?: number;
 	index_number?: string;
+	programme?: Programme;
+	level?: number;
+	school?: string;
+	department?: Department;
+	enrollment_year?: number;
 	session?: string;
 	fee_payment?: string;
 	status?: string;
-	level?: number;
-	enrollment_year?: string;
+	registration_status?: string;
+	hometown?: string;
+}
+
+interface Programme {
+	id?: number;
+	department?: Department;
+	name?: string;
+	duration?: number;
+	required_credit?: number;
+	degree_type?: string;
+	degree_level?: string;
+}
+
+interface Department {
+	id?: number;
+	name?: string;
+	prefix?: string;
+	hod?: Hod;
+}
+
+interface Hod {
+	id?: number;
+	name?: string;
+	email?: string;
 }
 
 interface ProfileState {
