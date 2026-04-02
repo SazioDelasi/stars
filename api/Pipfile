@@ -10,6 +10,7 @@ markdown = "*"
 djangorestframework-simplejwt = {extras = ["crypto"], version = "*"}
 django-cors-headers = "*"
 django-filter = "*"
+gunicorn = "*"
 
 [dev-packages]
 
