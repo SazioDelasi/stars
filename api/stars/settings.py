@@ -27,10 +27,11 @@ DEBUG = True
 
 AUTH_USER_MODEL = "authentication.User"
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "stars-er7u.onrender.com", "stars-black.vercel.app"]
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "https://stars-black.vercel.app/"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
