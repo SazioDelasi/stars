@@ -6,12 +6,12 @@ import {
 	ChevronRight, Pin, Clock,
 	Search, Ship
 } from "lucide-react";
-import { Announcement } from "@/lib/types/announcements";
+// import { Announcement } from "@/lib/types/announcements";
 
 export default function Announcements() {
 	const [filter, setFilter] = useState("All");
 
-	const NEWS: Announcement[] = [
+	const NEWS = [
 		{
 			id: 1,
 			tag: "Urgent",
