@@ -118,7 +118,7 @@ User (accounts) ─── role: student | hod | exams_coordinator
 
 ---
 
-## 🔌 API Endpoints
+##  API Endpoints
 
 ### Auth
 ```
@@ -171,14 +171,4 @@ GET  /api/grievances/summary/             → Summary counts (dashboard)
 - **No plain-text passwords**: Django's PBKDF2 hashing by default (can upgrade to Argon2)
 - **Session-less**: JWT-based stateless API — no server-side session storage
 
----
 
-##  Future Expansion (from proposal)
-
-- [ ] Switch SQLite → PostgreSQL for production
-- [ ] Add `django-argon2` for stronger password hashing
-- [ ] AI Academic Advising endpoint (suggest study paths for students in danger)
-- [ ] Push notifications (Firebase/WebSocket)
-- [ ] Resource Library module (course study materials)
-- [ ] Course registration gating (50% fee payment rule)
-- [ ] Multi-department support for Exams Coordinator drill-down
