@@ -31,7 +31,6 @@ export const navigation: Record<UserRole, NavItem[]> = {
 		{ label: "Announcements", href: "/student/announcements", icon: Bell },
 		{ label: "Profile", href: "/student/profile", icon: User },
 	],
-
 	lecturer: [
 		{ label: "Dashboard", href: "/lecturer", icon: LayoutDashboard },
 		{ label: "My Courses", href: "/lecturer/courses", icon: BookOpen },
@@ -40,7 +39,6 @@ export const navigation: Record<UserRole, NavItem[]> = {
 		{ label: "Resources", href: "/lecturer/resources", icon: FileText },
 		{ label: "Profile", href: "/lecturer/profile", icon: User },
 	],
-
 	hod: [
 		{ label: "Dashboard", href: "/hod", icon: LayoutDashboard },
 		{ label: "Department", href: "/hod/department", icon: Map },

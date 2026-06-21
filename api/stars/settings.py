@@ -32,7 +32,7 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1", "stars-er7u.onrender.com", "stars-bla
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "https://stars-black.vercel.app/"
+    "https://stars-black.vercel.app"
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     "accounts",
     "academics",
     "registry",
+    "adminpanel",
 ]
 
 REST_FRAMEWORK = {

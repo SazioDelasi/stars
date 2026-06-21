@@ -5,13 +5,14 @@ from authentication.models import User
 from django.contrib.auth import authenticate
 from authentication.utils.user import get_auth_for_user
 from rest_framework.response import Response
+from rest_framework.request import Request
 from rest_framework import status
 
 class LoginView(APIView):
     permission_classes = [AllowAny]
     serializer_class = UserSerializer
     
-    def post(self, request): 
+    def post(self, request: Request) -> Response:
         email = request.data.get('email')
         password = request.data.get('password')
         try:

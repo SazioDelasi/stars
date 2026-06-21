@@ -19,6 +19,8 @@ api.interceptors.response.use(
 	(response) => response,
 	async (error) => {
 		const originalRequest = error.config;
+		console.log(originalRequest);
+		
 
 		// If error is 401 and we haven't retried this request yet
 		if (error.response?.status === 401 && !originalRequest._retry) {
@@ -34,7 +36,7 @@ api.interceptors.response.use(
 				// Attempt to get a new access token
 				// Use a base axios instance to avoid interceptor recursion
 				const res = await axios.post(
-					`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`,
+					`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh/`,
 					{
 						refreshToken,
 					},
