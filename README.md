@@ -31,7 +31,7 @@ uenr_stars/
 
 ---
 
-## 🚀 Running the Project
+##  Running the Project
 
 ### Backend
 
@@ -53,7 +53,7 @@ npm start                        # Runs on http://localhost:3000
 
 ---
 
-## 🔐 Demo Accounts (all password: `stars2024`)
+##  Demo Accounts (all password: `stars2024`)
 
 | Role | Username | Access |
 |------|----------|--------|
@@ -67,7 +67,7 @@ npm start                        # Runs on http://localhost:3000
 
 ---
 
-## 📦 Key Features
+##  Key Features
 
 ### Identity & Access Control (RBAC)
 - JWT-based stateless auth (`access_token` + `refresh_token`)
@@ -118,7 +118,7 @@ User (accounts) ─── role: student | hod | exams_coordinator
 
 ---
 
-## 🔌 API Endpoints
+##  API Endpoints
 
 ### Auth
 ```
@@ -163,7 +163,7 @@ GET  /api/grievances/summary/             → Summary counts (dashboard)
 
 ---
 
-## 🔒 Security Implementation
+##  Security Implementation
 
 - **JWT (djangorestframework-simplejwt)**: 8-hour access tokens, 7-day rotating refresh tokens
 - **RBAC enforcement**: Every view checks `request.user.role`; HoDs can only see their department
@@ -173,7 +173,7 @@ GET  /api/grievances/summary/             → Summary counts (dashboard)
 
 ---
 
-## 📈 Future Expansion (from proposal)
+##  Future Expansion (from proposal)
 
 - [ ] Switch SQLite → PostgreSQL for production
 - [ ] Add `django-argon2` for stronger password hashing
