@@ -16,6 +16,19 @@ ROUTING_MAP = {
     'feedback':'hod','other':'hod',
 }
 
+ROUTING_MAP = {
+    'result':       'dept_coordinator',
+    'grade':        'dept_coordinator',
+    'transcript':   'university_coordinator',
+    'graduation':   'university_coordinator',
+    'registration': 'hod',
+    'timetable':    'hod',
+    'lecturer':     'hod',
+    'portal':       'administrator',
+    'feedback':     'administrator',
+    'other':        'administrator',
+}
+
 def classify_priority(grievance_type, subject, description):
     text = (subject + ' ' + description).lower()
     if grievance_type in HIGH_PRIORITY_TYPES:
@@ -33,9 +46,30 @@ def classify_priority(grievance_type, subject, description):
 def auto_assign(grievance_type, student):
     from django.contrib.auth import get_user_model
     User = get_user_model()
-    target_role = ROUTING_MAP.get(grievance_type, 'hod')
+    target_role = ROUTING_MAP.get(grievance_type, 'administrator')
+
+    # Administrator grievances go to any administrator (not dept-specific)
+    if target_role == 'administrator':
+        candidate = User.objects.filter(
+            role='administrator', is_active=True
+        ).first()
+        if candidate:
+            return candidate
+        # Fallback to university coordinator
+        return User.objects.filter(
+            role='university_coordinator', is_active=True
+        ).first()
+
+    # Dept-specific roles — find staff in student's department
     dept = student.department
-    candidate = User.objects.filter(role=target_role, department=dept, is_active=True).first()
+    candidate = User.objects.filter(
+        role=target_role, department=dept, is_active=True
+    ).first()
     if candidate:
         return candidate
-    return User.objects.filter(role__in=['hod','dept_coordinator'], department=dept, is_active=True).first()
+
+    # Fallback: any staff in dept
+    return User.objects.filter(
+        role__in=['hod', 'dept_coordinator'],
+        department=dept, is_active=True
+    ).first()

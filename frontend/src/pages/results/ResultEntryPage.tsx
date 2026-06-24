@@ -205,7 +205,7 @@ const ResultEntryPage: React.FC = () => {
   /* load existing results when course selected */
   useEffect(() => {
     if (!selCourse || students.length === 0) { setRows([]); return; }
-    const filtered = students.filter(s => String(s.current_year) === selYOS);
+    const filtered = students;
 
     resultsApi.courseResults({
       course: selCourse,
@@ -218,7 +218,7 @@ const ResultEntryPage: React.FC = () => {
       setRows(filtered.map(s => {
         const ex = existingMap.get(s.id);
         const ca   = ex?.continuous_assessment != null ? String(ex.continuous_assessment) : '';
-        const exam = ex?.exam_score != null              ? String(ex.exam_score) : '';
+        const exam = ex?.exam_score != null            ? String(ex.exam_score) : '';
         const total = ex?.total_score ?? undefined;
         const gradeInfo = total !== undefined ? computeGrade(total) : undefined;
         return {
@@ -289,17 +289,27 @@ const ResultEntryPage: React.FC = () => {
   };
 
   const handlePublish = async () => {
+    if (!selCourse) return;
     setPublishing(true);
     try {
-      const res = await resultsApi.publishResults({
-        department_id: students[0]?.department,
+      const deptId = students[0]?.department;
+      if (!deptId) {
+        alert('Could not determine department. Please reload the page.');
+        setPublishing(false);
+        return;
+      }
+      await resultsApi.publishResults({
+        department_id: Number(deptId),
         academic_year_id: Number(selYear),
         semester: Number(selSem),
         year_of_study: Number(selYOS),
       });
-      showMsg(`✅ ${res.data.message}`);
-    } catch { showMsg('Publish failed.', 'error'); }
-    finally { setPublishing(false); }
+      showMsg('Results published successfully.');
+    } catch (err: any) {
+      showMsg('Failed to publish results.', 'error');
+    } finally {
+      setPublishing(false);
+    }
   };
 
   const handleEditSave = async (resultId: number, ca: number, exam: number, reason: string) => {

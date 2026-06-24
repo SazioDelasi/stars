@@ -115,7 +115,19 @@ const GrievancesPage: React.FC = () => {
         </select>
         <select className="form-control" value={typeFilter} onChange={e=>setTypeFilter(e.target.value)}>
           <option value="">All Types</option>
-          {Object.entries(typeLabel).map(([v,l])=><option key={v} value={v}>{l}</option>)}
+          {Object.entries(typeLabel)
+            .filter(([v]) => {
+              if (user?.role === 'dept_coordinator')
+                return ['result','grade'].includes(v);
+              if (user?.role === 'hod')
+                return ['registration','timetable','lecturer'].includes(v);
+              if (user?.role === 'administrator')
+                return ['portal','feedback','other'].includes(v);
+              if (user?.role === 'university_coordinator')
+                return ['transcript','graduation'].includes(v);
+              return true; // students see all
+            })
+            .map(([v,l])=><option key={v} value={v}>{l}</option>)}
         </select>
         <select className="form-control" value={priorityFilter} onChange={e=>setPriority(e.target.value)}>
           <option value="">All Priorities</option>

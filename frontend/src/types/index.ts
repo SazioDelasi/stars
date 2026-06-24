@@ -3,7 +3,7 @@ export interface User {
   username: string;
   full_name: string;
   email: string;
-  role: 'student' | 'hod' | 'exams_coordinator' | 'dept_coordinator' | 'university_coordinator';
+  role: 'student' | 'hod' | 'exams_coordinator' | 'dept_coordinator' | 'university_coordinator' | 'administrator' | 'hod';
   department_id: number | null;
 }
 

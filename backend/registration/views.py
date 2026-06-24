@@ -14,7 +14,7 @@ from results.models import Course, AcademicYear, CourseOffering
 
 MAX_ELECTIVE_CREDITS = 12   # max extra elective credits on top of core
 MAX_TOTAL_CREDITS    = 27
-MIN_CREDITS          = 9
+MIN_CREDITS          = 3
 
 
 def _get_student(user):

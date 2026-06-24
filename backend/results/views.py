@@ -104,11 +104,13 @@ class PublishResultsView(APIView):
         semester       = request.data.get('semester')
         year_of_study  = request.data.get('year_of_study')
 
+        from django.db.models import Q
         qs = CourseResult.objects.filter(
             student__department_id=dept_id,
             academic_year_id=academic_year_id,
             semester=semester,
-            year_of_study=year_of_study,
+        ).filter(
+            Q(year_of_study=year_of_study) | Q(year_of_study__isnull=True)
         )
         count = qs.update(is_published=True)
 

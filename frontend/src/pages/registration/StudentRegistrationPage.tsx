@@ -235,7 +235,8 @@ const StudentRegistrationPage: React.FC = () => {
                   <span style={{ fontSize:13, fontWeight:600 }}>Credit Load</span>
                   <span className="font-mono" style={{
                     fontWeight:800,
-                    color: available.current_total_credits >= 9 ? 'var(--green)' : 'var(--red)'
+
+                    color: available.current_total_credits >= 3 ? 'var(--green)' : 'var(--red)'
                   }}>
                     {available.current_total_credits} / {available.max_total_credits} cr
                   </span>
@@ -248,7 +249,7 @@ const StudentRegistrationPage: React.FC = () => {
                   }} />
                 </div>
                 <div style={{ fontSize:11, color:'var(--gray-500)', marginTop:4, display:'flex', justifyContent:'space-between' }}>
-                  <span>Min 9 credits to submit</span>
+                  <span>Min 3 credits to submit</span>
                   <span>Electives: {available.current_elective_credits}/{available.max_elective_credits} cr</span>
                 </div>
               </div>
@@ -369,12 +370,12 @@ const StudentRegistrationPage: React.FC = () => {
             {/* Submit */}
             {activeReg.status === 'draft' && (
               <button className="btn btn-success" style={{ width:'100%', justifyContent:'center', padding:'12px' }}
-                onClick={handleSubmit} disabled={submitting || (activeReg.total_credits < 9)}>
+                onClick={handleSubmit} disabled={submitting || (activeReg.total_credits < 3)}>
                 <Send size={14} /> {submitting ? 'Submitting…' : 'Submit for Approval'}
               </button>
             )}
             {activeReg.status === 'submitted' && (
-              <div className="alert alert-info"><Clock size={14}/><span>Awaiting coordinator approval.</span></div>
+              <div className="alert alert-info"><Clock size={14}/><span>Awaiting Head of Department approval.</span></div>
             )}
             {activeReg.status === 'approved' && (
               <div className="alert alert-success"><CheckCircle size={14}/><span>Registration approved.</span></div>

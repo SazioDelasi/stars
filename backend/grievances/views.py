@@ -26,12 +26,45 @@ class GrievanceListView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
+
         if user.is_student:
             return Grievance.objects.filter(student__user=user)
-        dept_id = scoped_dept_id(user)
-        qs = Grievance.objects.select_related('student__user','student__department','assigned_to')
-        return qs.filter(student__department_id=dept_id) if dept_id else qs
 
+        qs = Grievance.objects.select_related(
+            'student__user', 'student__department', 'assigned_to'
+        )
+
+        if user.role == 'dept_coordinator':
+            # Coordinators see only exams-related grievances in their dept
+            dept_id = scoped_dept_id(user)
+            qs = qs.filter(
+                grievance_type__in=['result', 'grade'],
+                student__department_id=dept_id,
+            )
+
+        elif user.role == 'hod':
+            # HoDs see registration, timetable, lecturer grievances in their dept
+            dept_id = scoped_dept_id(user)
+            qs = qs.filter(
+                grievance_type__in=['registration', 'timetable', 'lecturer'],
+                student__department_id=dept_id,
+            )
+
+        elif user.role == 'administrator':
+            # Admin sees portal, feedback, other — no dept filter
+            qs = qs.filter(
+                grievance_type__in=['portal', 'feedback', 'other']
+            )
+
+        elif user.role == 'university_coordinator':
+            # Uni coord sees transcript and graduation grievances from all depts
+            # Plus can see everything as oversight
+            type_filter = self.request.query_params.get('type_scope')
+            if type_filter == 'assigned':
+                qs = qs.filter(grievance_type__in=['transcript', 'graduation'])
+            # else sees all (no filter) for oversight
+
+        return qs
     def perform_create(self, serializer):
         serializer.save()
 
@@ -42,11 +75,28 @@ class GrievanceDetailView(generics.RetrieveUpdateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_student: return Grievance.objects.filter(student__user=user)
-        dept_id = scoped_dept_id(user)
-        qs = Grievance.objects.all()
-        return qs.filter(student__department_id=dept_id) if dept_id else qs
 
+        if user.is_student:
+            return Grievance.objects.filter(student__user=user)
+
+        qs = Grievance.objects.all()
+
+        if user.role == 'dept_coordinator':
+            dept_id = scoped_dept_id(user)
+            qs = qs.filter(
+                grievance_type__in=['result', 'grade'],
+                student__department_id=dept_id,
+            )
+        elif user.role == 'hod':
+            dept_id = scoped_dept_id(user)
+            qs = qs.filter(
+                grievance_type__in=['registration', 'timetable', 'lecturer'],
+                student__department_id=dept_id,
+            )
+        elif user.role == 'administrator':
+            qs = qs.filter(grievance_type__in=['portal', 'feedback', 'other'])
+
+        return qs
     def update(self, request, *args, **kwargs):
         if request.user.is_student:
             return Response({'error': 'Students cannot edit grievances.'}, status=403)
@@ -126,21 +176,22 @@ class GrievanceSummaryView(APIView):
         user = request.user
         if user.is_student:
             qs = Grievance.objects.filter(student__user=user)
-        else:
+        elif user.role == 'dept_coordinator':
             dept_id = scoped_dept_id(user)
-            qs = Grievance.objects.filter(student__department_id=dept_id) if dept_id \
-                 else Grievance.objects.all()
-        now = timezone.now()
-        return Response({
-            'total':         qs.count(),
-            'pending':       qs.filter(status='pending').count(),
-            'in_review':     qs.filter(status='in_review').count(),
-            'escalated':     qs.filter(status='escalated').count(),
-            'resolved':      qs.filter(status='resolved').count(),
-            'rejected':      qs.filter(status='rejected').count(),
-            'high_priority': qs.filter(priority='high',
-                                status__in=['pending','in_review','escalated']).count(),
-            'overdue':       qs.filter(
-                response_deadline__lt=now
-            ).exclude(status__in=['resolved','rejected']).count(),
-        })
+            qs = Grievance.objects.filter(
+                grievance_type__in=['result', 'grade'],
+                student__department_id=dept_id,
+            )
+        elif user.role == 'hod':
+            dept_id = scoped_dept_id(user)
+            qs = Grievance.objects.filter(
+                grievance_type__in=['registration', 'timetable', 'lecturer'],
+                student__department_id=dept_id,
+            )
+        elif user.role == 'administrator':
+            qs = Grievance.objects.filter(
+                grievance_type__in=['portal', 'feedback', 'other']
+            )
+        else:
+            # university_coordinator sees all
+            qs = Grievance.objects.all()

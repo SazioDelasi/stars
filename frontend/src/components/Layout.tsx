@@ -26,7 +26,8 @@ const Layout: React.FC = () => {
     dept_coordinator:        'Dept Exams Coordinator',
     university_coordinator:  'University Exams Coordinator',
     exams_coordinator:       'Exams Coordinator',
-  };
+    administrator:           'System Administrator',
+};
 
   const isStaff    = user?.role !== 'student';
   const isUniCoord = user?.role === 'university_coordinator';

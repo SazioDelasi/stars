@@ -109,16 +109,33 @@ class GlobalSearchView(APIView):
         if dept_id:       qs = qs.filter(department_id=dept_id)
         if programme_id:  qs = qs.filter(programme_id=programme_id)
         if year:          qs = qs.filter(current_year=year)
-
+        
         if q:
-            qs = qs.filter(
-                Q(user__first_name__icontains=q) |
-                Q(user__last_name__icontains=q) |
-                Q(index_number__icontains=q) |
-                Q(reference_number__icontains=q) |
-                Q(programme__name__icontains=q) |
-                Q(department__name__icontains=q)
-            )
+            words = q.strip().split()
+            if len(words) >= 2:
+                # Multi-word query — try matching first+last name combination
+                # e.g. "kofi adu" → first_name=kofi AND last_name=adu
+                from functools import reduce
+                import operator
+                # Build AND filter: every word must appear somewhere in the name
+                word_filters = []
+                for word in words:
+                    word_filters.append(
+                        Q(user__first_name__icontains=word) |
+                        Q(user__last_name__icontains=word)
+                    )
+                combined = reduce(operator.and_, word_filters)
+                qs = qs.filter(combined)
+            else:
+                # Single word — search across all fields
+                qs = qs.filter(
+                    Q(user__first_name__icontains=q) |
+                    Q(user__last_name__icontains=q) |
+                    Q(index_number__icontains=q) |
+                    Q(reference_number__icontains=q) |
+                    Q(programme__name__icontains=q) |
+                    Q(department__name__icontains=q)
+                )
 
         students = list(qs.select_related('user', 'department', 'programme'))
 

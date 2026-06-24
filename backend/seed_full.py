@@ -89,9 +89,9 @@ def mk_user(username, fname, lname, email, role, dept=None):
         first_name=fname, last_name=lname, email=email, role=role, department=dept)
     return u
 
-# University Coordinator
+admin = mk_user('portal_admin', 'Esi', 'Amoah', 'admin@uenr.edu.gh', 'administrator', None)
 uni_coord = mk_user('uni_coord','Kwame','Asante','kwame.asante@uenr.edu.gh',
-                    User.ROLE_UNIVERSITY_COORDINATOR)
+                    User.ROLE_UNIVERSITY_COORDINATOR)# University Coordinator
 
 # HoDs
 hod_cse  = mk_user('hod_cse', 'Abena','Mensah',  'abena.mensah@uenr.edu.gh',  User.ROLE_HOD, cse)
