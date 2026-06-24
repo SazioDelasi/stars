@@ -5,7 +5,7 @@ A full-stack academic information system built with Django REST Framework + Reac
 
 ---
 
-## 🏗 Architecture
+##  Architecture
 
 ```
 uenr_stars/
